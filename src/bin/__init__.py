@@ -396,7 +396,6 @@ async def telegram_forward_message(update: Update, context: ContextTypes.DEFAULT
             else:
                 logger.warning("TG_FWD: TEXT_MENTION entity found but 'user' attribute is missing.")
 
-        
         # 3. Append the processed entity part
         if discord_id:
             ping_text = f"<@{discord_id}>"
@@ -413,6 +412,18 @@ async def telegram_forward_message(update: Update, context: ContextTypes.DEFAULT
             elif entity.type == entity.type.SPOILER:
                 # wrap spoilers in || x ||
                 processed_parts.append("||" + escape_discord_markdown_preserve_urls(entity_text) + "||")
+            elif entity.type == entity.type.STRIKETHROUGH:
+                # wrap strikethrough in ~~ x ~~
+                processed_parts.append("~~" + escape_discord_markdown_preserve_urls(entity_text) + "~~")
+            elif entity.type == entity.type.BOLD:
+                # wrap bold in ** x **
+                processed_parts.append("**" + escape_discord_markdown_preserve_urls(entity_text) + "**")
+            elif entity.type == entity.type.ITALIC:
+                # wrap italics in _ x _
+                processed_parts.append("_" + escape_discord_markdown_preserve_urls(entity_text) + "_")
+            elif entity.type == entity.type.UNDERLINE:
+                # wrap underline in __ x __
+                processed_parts.append("__" + escape_discord_markdown_preserve_urls(entity_text) + "__")
             else:
                 processed_parts.append(escape_discord_markdown_preserve_urls(entity_text))
 
