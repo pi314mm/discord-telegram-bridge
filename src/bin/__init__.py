@@ -396,6 +396,7 @@ async def telegram_forward_message(update: Update, context: ContextTypes.DEFAULT
             else:
                 logger.warning("TG_FWD: TEXT_MENTION entity found but 'user' attribute is missing.")
 
+        
         # 3. Append the processed entity part
         if discord_id:
             ping_text = f"<@{discord_id}>"
@@ -409,6 +410,9 @@ async def telegram_forward_message(update: Update, context: ContextTypes.DEFAULT
                 # as Discord handles them well. If it's a text_link, entity_text is the URL.
                 # For text_link, the display text is handled by Telegram; we just pass the URL.
                 processed_parts.append(entity_text)
+            elif entity.type == entity.type.SPOILER:
+                # wrap spoilers in || x ||
+                processed_parts.append("||" + escape_discord_markdown_preserve_urls(entity_text) + "||")
             else:
                 processed_parts.append(escape_discord_markdown_preserve_urls(entity_text))
 
